@@ -1,4 +1,4 @@
-package com.example
+package com.malinowski
 
 
 class ApplicationTest {
