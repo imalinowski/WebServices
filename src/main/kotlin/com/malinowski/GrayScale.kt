@@ -21,6 +21,7 @@ class GrayScale : CoroutineScope {
             if (!file.exists()) {
                 throw FileNotFoundException()
             }
+            println("RASPBERRY grayscale of ${file.name} STARTED!!! <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
 
             // will complete in new coroutine
             val origin = withContext(Dispatchers.IO) {
@@ -38,6 +39,7 @@ class GrayScale : CoroutineScope {
                 )
             }
             println("RASPBERRY saved $defPath/upload_grayscale/${file.name}")
+            println("RASPBERRY grayscale of ${file.name} FINISHED!!! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
         }
     }
 
