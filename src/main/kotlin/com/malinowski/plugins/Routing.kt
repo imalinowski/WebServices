@@ -4,35 +4,33 @@ import com.malinowski.GrayScale
 import com.malinowski.LetterWord
 import io.ktor.http.*
 import io.ktor.http.content.*
+import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
+import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import java.io.File
 
 private val path = System.getProperty("user.dir")
 
 fun Application.configureRouting() {
+    install(ContentNegotiation) {
+        json()
+    }
     routing {
         get("/") {
             call.respondText("Hello World!")
         }
         post("/array") {
-            launch(Dispatchers.Default) { // launch on new thread
-//                println("RASPBERRY array >> ${call.receiveText()}")
-//                withContext(Dispatchers.IO) {
-//                    val text = BufferedReader(call.receiveStream().reader()).readText()
-//                    println("RASPBERRY array >> $text")
-//                }
-                val data = call.receive<LetterWord>()
-                val filteredData = data.copy(
-                    words = data.words.filter { it.contains(data.letter) }
-                )
-                call.respond(filteredData)
-            }
+            val letterWord = call.receive<LetterWord>()
+            val filtered = letterWord.copy(
+                words = letterWord.words.filter {
+                    it.contains(letterWord.letter)
+                }
+            )
+            call.respond(filtered)
         }
         post("/grayscale/upload") { _ ->
             val multipart = call.receiveMultipart()
