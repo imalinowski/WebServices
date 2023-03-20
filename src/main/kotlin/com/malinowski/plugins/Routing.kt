@@ -37,7 +37,10 @@ fun Application.configureRouting() {
             multipart.forEachPart { part ->
                 if (part is PartData.FileItem) {
                     val file = saveImage(part)
-                    GrayScale().grayscale(file.absolutePath)
+                    val bwFile = GrayScale().grayscale(file.absolutePath)
+                    call.respond(bwFile)
+                } else {
+                    call.respond(HttpStatusCode.BadRequest)
                 }
                 part.dispose()
             }
